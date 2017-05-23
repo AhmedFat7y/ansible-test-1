@@ -1,0 +1,6 @@
+# [web]
+# host1.example.org ansible_host=192.168.33.11 ansible_user=root
+# host2.example.org ansible_host=192.168.33.12 ansible_user=root
+
+[test]
+test-host ansible_host=172.104.157.60 ansible_user=root ansible_become_pass="LOL@lol2"

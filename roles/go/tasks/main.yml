@@ -1,0 +1,30 @@
+- name: Git Clone gvm repository
+  git:
+    repo: "https://github.com/moovweb/gvm.git"
+    dest: "{{ ansible_env.HOME }}/gvm-repo"
+    accept_hostkey: yes
+    clone: yes
+    update: true
+    depth: 1
+
+- name: Installs go version manager
+  shell: "{{ item }}"
+  with_items:
+    - . "{{ ansible_env.HOME }}/gvm-repo/binscripts/gvm-installer"
+    - source "{{ ansible_env.HOME }}/.gvm/scripts/gvm" && gvm install go1.4 --binary
+    - source "{{ ansible_env.HOME }}/.gvm/scripts/gvm" && gvm use go1.4 --default
+    - source "{{ ansible_env.HOME }}/.gvm/scripts/gvm" && GOROOT_BOOTSTRAP=$GOROOT gvm install go1.8 --with-build-tools
+    - source "{{ ansible_env.HOME }}/.gvm/scripts/gvm" && gvm use go1.8 --default
+  args:
+    executable: "/bin/bash"
+  register: install_gvm_go
+  ignore_errors: True
+
+# - name: remove .gvm and gvm-repo from user directory
+#   file:
+#     path: "{{ item }}"
+#     state: absent
+#   with_items:
+#     - "{{ ansible_env.HOME }}/gvm-repo"
+#     - "{{ ansible_env.HOME }}/.gvm"
+#   when: install_gvm_go|failed

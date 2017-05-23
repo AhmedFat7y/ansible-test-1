@@ -1,0 +1,16 @@
+- name: Updates apt cache
+  apt: update_cache=true
+
+- name: Installs curl, wget, and git
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - wget
+    - curl
+    - git
+    - mercurial
+    - make
+    - binutils
+    - bison
+    - gcc
+    - build-essential
+    - libssl-dev

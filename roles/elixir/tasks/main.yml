@@ -1,0 +1,68 @@
+- name: Check if erlang-solutions is installed
+  command: dpkg-query -W erlang-solutions
+  register: erlang_solutions_is_installed
+  failed_when: erlang_solutions_is_installed.rc > 1
+  # if rc == 1 then it's not installed
+  changed_when: erlang_solutions_is_installed.rc == 1
+  ignore_errors: True
+
+- name: Download Erlang repository entry package
+  get_url:
+    url: "https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb"
+    dest: "/tmp/erlang-solutions_1.0_all.deb"
+  when: erlang_solutions_is_installed.rc == 1
+
+- name: Install Erlang repository entry package
+  apt: deb="/tmp/erlang-solutions_1.0_all.deb"
+  become: True
+  become_user: "root"
+  become_method: "sudo"
+  when: erlang_solutions_is_installed.rc == 1
+
+- name: Updates apt cache
+  apt: update_cache=true
+  when: erlang_solutions_is_installed.rc == 1
+
+- name: Installs erlang and elixir
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - esl-erlang
+    - elixir
+- name: install hex
+  command: mix local.hex --force
+
+# - name: Push future default virtual host configuration
+#   copy: src=awesome-app dest=/etc/apache2/sites-available/awesome-app.conf mode=0640
+
+# - name: Activates our virtualhost
+#   command: a2ensite awesome-app
+
+# - name: Check that our config is valid
+#   command: apache2ctl configtest
+#   register: result
+#   ignore_errors: True
+
+# - name: Rolling back - Restoring old default virtualhost
+#   command: a2ensite 000-default
+#   when: result|failed
+
+# - name: Rolling back - Removing out virtualhost
+#   command: a2dissite awesome-app
+#   when: result|failed
+
+# - name: Rolling back - Ending playbook
+#   fail: msg="Configuration file is not valid. Please check that before re-running the playbook."
+#   when: result|failed
+
+# - name: Deploy our awesome application
+#   git: repo=https://github.com/leucos/ansible-tuto-demosite.git dest=/var/www/awesome-app
+#   tags: deploy
+
+# - name: Deactivates the default virtualhost
+#   command: a2dissite 000-default
+
+# - name: Deactivates the default ssl virtualhost
+#   command: a2dissite default-ssl
+#   notify:
+#     - restart apache
+
