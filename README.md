@@ -254,5 +254,5 @@ Scripts to use
 
 - To run the site.yml with hosts file `hosts`
   ```bash
-    ansible -i hosts site.yml
+    ansible-playbook -i hosts site.yml
   ```
