@@ -1,5 +1,5 @@
-- hosts: test
+- hosts: host0
   roles:
-    # - { role: basics }
+    - { role: basics }
     # - { role: elixir }
-    - { role: go }
+    # - { role: go }

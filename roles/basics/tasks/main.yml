@@ -1,16 +1,47 @@
-- name: Updates apt cache
-  apt: update_cache=true
+# - name: Updates apt cache
+#   apt: update_cache=true
 
-- name: Installs curl, wget, and git
-  apt: pkg={{ item }} state=latest
-  with_items:
-    - wget
-    - curl
-    - git
-    - mercurial
-    - make
-    - binutils
-    - bison
-    - gcc
-    - build-essential
-    - libssl-dev
+# - name: Installs curl, wget, and git
+#   apt: pkg={{ item }} state=latest
+#   with_items:
+#     - wget
+#     - curl
+#     - git
+#     - mercurial
+#     - make
+#     - binutils
+#     - bison
+#     - gcc
+#     - build-essential
+#     - libssl-dev
+
+- name: Create deployment user
+  user:
+    name: deployer
+    password: "{{ 'deployer' | password_hash('sha512') }}"
+    shell: /bin/bash
+    update_password: on_create
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  register: deployer_created
+
+- name: Add ssh key
+  authorized_key:
+    user: deployer
+    key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
+    state: present
+
+- name: Disallow ssh password authentication 
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PasswordAuthentication\s'
+    line: "PasswordAuthentication no"
+    validate: '/usr/sbin/sshd -T -f %s'
+  register: changed_ssh_config
+  ignore_errors: True
+
+- name: Restart sshd
+  service: name=ssh state=restarted
+  when: changed_ssh_config|success
