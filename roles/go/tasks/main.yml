@@ -20,11 +20,11 @@
   register: install_gvm_go
   ignore_errors: True
 
-# - name: remove .gvm and gvm-repo from user directory
-#   file:
-#     path: "{{ item }}"
-#     state: absent
-#   with_items:
-#     - "{{ ansible_env.HOME }}/gvm-repo"
-#     - "{{ ansible_env.HOME }}/.gvm"
-#   when: install_gvm_go|failed
+- name: remove .gvm and gvm-repo from user directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ ansible_env.HOME }}/gvm-repo"
+    - "{{ ansible_env.HOME }}/.gvm"
+  when: install_gvm_go|failed

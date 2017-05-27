@@ -1,0 +1,14 @@
+- hosts: host0
+  remote_user: root
+  roles:
+    # - { role: basics }
+    - { role: create-deployer-user }
+    - { role: php }
+    # - { role: configure-sshd-service }
+    # - { role: configure-phpfpm-user }
+    # - { role: configure-nginx-sites }
+    # - { role: install-php-composer }
+- hosts: host0
+  remote_user: deployer
+  roles:
+    - { role: deploy-lumen-app }

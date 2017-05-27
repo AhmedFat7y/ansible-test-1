@@ -1,0 +1,58 @@
+- name: Create deployment user
+  user:
+    name: deployer
+    password: "{{ 'deployer' | password_hash('sha512') }}"
+    shell: /bin/bash
+    update_password: on_create
+  register: deployer_created
+
+- name: Add ssh key
+  authorized_key:
+    user: deployer
+    key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
+    state: present
+
+- name: Ensures /home/deployer exists
+  file:
+    path: /home/deployer
+    state: directory
+    mode: 0740
+
+- name: Set proper acl flags for deployer user
+  acl:
+    path: /home/deployer
+    entry: "u:deployer:rwx"
+    state: present
+    recursive: yes
+    default: yes
+
+- name: set proper acl flags for www-data group
+  acl:
+    path: /home/deployer
+    entry: "g:www-data:r"
+    state: present
+    recursive: yes
+    default: yes
+
+- name: Ensures /home/deployer/web exists
+  file:
+    path: /home/deployer/web
+    state: directory
+    group: deployer
+    owner: deployer
+
+- name: Copy deployer private key to remote machine
+  copy:
+    src: deployer
+    dest: /home/deployer/.ssh/id_rsa
+    mode: 0400
+    group: deployer
+    owner: deployer
+
+- name: Copy deployer public key to remote machine
+  copy:
+    src: deployer.pub
+    dest: /home/deployer/.ssh/id_rsa.pub
+    mode: 0644
+    group: deployer
+    owner: deployer

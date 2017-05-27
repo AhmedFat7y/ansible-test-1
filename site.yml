@@ -1,5 +1,0 @@
-- hosts: host0
-  roles:
-    - { role: basics }
-    # - { role: elixir }
-    # - { role: go }
