@@ -1,18 +1,26 @@
-- name: Clone/Update aya's lumen app 
+- name: Clone/Update aya's lumen app
   git: 
-    repo: "gitlab@gitlab.robustastudio.com:AyaAhmed/testlumenmama.git"
-    dest: /home/deployer/web
+    repo: "{{ project_repo }}"
+    dest: "{{ project_location }}"
     accept_hostkey: True
     force: True
 
 - name: Run composer update
-  shell: composer update
+  shell: composer update  
   args:
-    chdir: /home/deployer/web
+    chdir: "{{ project_location }}"
 
 # need to copy .env file and make sure it points to correct database
+- name: Copy .env file to lumen app directory
+  template:
+    src: env
+    dest: "{{ project_location }}/.env"
+    owner: "{{ deployer_user }}"
+    group: "{{ deployer_user }}"
+    mode: 0400
+
 
 - name: Run Artisan migrate
-  shell: artisan migrate
+  shell: php artisan migrate
   args:
-    chdir: /home/deployer/web
+    chdir: "{{ project_location }}"

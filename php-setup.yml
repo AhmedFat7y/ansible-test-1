@@ -1,5 +1,5 @@
 - hosts: host0
-  remote_user: root
+  remote_user: {{ sudo_user }}
   roles:
     # - { role: basics }
     - { role: create-deployer-user }
@@ -9,6 +9,6 @@
     # - { role: configure-nginx-sites }
     # - { role: install-php-composer }
 - hosts: host0
-  remote_user: deployer
+  remote_user: {{ deployer_user }}
   roles:
     - { role: deploy-lumen-app }

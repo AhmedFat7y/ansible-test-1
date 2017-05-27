@@ -1,0 +1,10 @@
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    linode_name: test1
+    linode_plan: 1
+    linode_datacenter: 10
+    linode_distro: 146
+    linode_ssh_key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
+  roles:
+    - { role: create-linode-server }

@@ -1,13 +1,13 @@
-- name: Add site file for test.kanshoubakuya.com
+- name: "Add site file for {{ domain_name }}"
   template:
     src: site.j2
-    dest: /etc/nginx/sites-available/test.kanshoubakuya.com
+    dest: "/etc/nginx/sites-available/{{ domain_name }}"
     owner: root
     group: root
     mode: "u=rw,g=r,o=r"
 
-- name: Link test.kanshoubakuya.com in /etc/nginx/sites-enabled
+- name: "Link {{ domain_name }} in /etc/nginx/sites-enabled"
   file:
-    src: /etc/nginx/sites-available/test.kanshoubakuya.com
-    dest: /etc/nginx/sites-enabled/test.kanshoubakuya.com
+    src: "/etc/nginx/sites-available/{{ domain_name }}"
+    dest: "/etc/nginx/sites-enabled/{{ domain_name }}"
     state: link

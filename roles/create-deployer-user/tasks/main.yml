@@ -1,6 +1,6 @@
 - name: Create deployment user
   user:
-    name: deployer
+    name: "{{ deployer_user }}"
     password: "{{ 'deployer' | password_hash('sha512') }}"
     shell: /bin/bash
     update_password: on_create
@@ -8,51 +8,51 @@
 
 - name: Add ssh key
   authorized_key:
-    user: deployer
+    user: "{{ deployer_user }}"
     key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
     state: present
 
-- name: Ensures /home/deployer exists
+- name: "Ensures /home/{{ deployer_user }} exists"
   file:
-    path: /home/deployer
+    path: "/home/{{ deployer_user }}"
     state: directory
     mode: 0740
 
-- name: Set proper acl flags for deployer user
+- name: "Set proper acl flags for {{ deployer_user }}"
   acl:
-    path: /home/deployer
-    entry: "u:deployer:rwx"
+    path: "/home/{{ deployer_user }}"
+    entry: "u:{{ deployer_user }}:rwx"
     state: present
     recursive: yes
     default: yes
 
 - name: set proper acl flags for www-data group
   acl:
-    path: /home/deployer
+    path: "/home/{{ deployer_user }}"
     entry: "g:www-data:r"
     state: present
     recursive: yes
     default: yes
 
-- name: Ensures /home/deployer/web exists
+- name: "Ensures {{ project_location }} exists"
   file:
-    path: /home/deployer/web
+    path: "{{ project_location }}"
     state: directory
-    group: deployer
-    owner: deployer
+    group: "{{ deployer_user }}"
+    owner: "{{ deployer_user }}"
 
 - name: Copy deployer private key to remote machine
   copy:
-    src: deployer
-    dest: /home/deployer/.ssh/id_rsa
+    src: deployer_user
+    dest: "/home/{{ deployer_user }}/.ssh/id_rsa"
     mode: 0400
-    group: deployer
-    owner: deployer
+    group: "{{ deployer_user }}"
+    owner: "{{ deployer_user }}"
 
 - name: Copy deployer public key to remote machine
   copy:
-    src: deployer.pub
-    dest: /home/deployer/.ssh/id_rsa.pub
+    src: "{{ deployer_user }}.pub"
+    dest: "/home/{{ deployer_user }}/.ssh/id_rsa.pub"
     mode: 0644
-    group: deployer
-    owner: deployer
+    group: "{{ deployer_user }}"
+    owner: "{{ deployer_user }}"

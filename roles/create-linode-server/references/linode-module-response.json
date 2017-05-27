@@ -1,0 +1,27 @@
+{
+    "changed": false,
+    "created_linode": {
+        "changed": true,
+        "instance": {
+            "fqdn": "li1652-97.members.linode.com",
+            "id": 3166291,
+            "ipv4": "172.104.136.97",
+            "name": "3166291_test1",
+            "private": [
+                {
+                    "fqdn": "p438-148.members.linode.com",
+                    "ip_id": 393091,
+                    "ipv4": "192.168.137.148"
+                }
+            ],
+            "public": [
+                {
+                    "fqdn": "li1652-97.members.linode.com",
+                    "ip_id": 467006,
+                    "ipv4": "172.104.136.97"
+                }
+            ],
+            "status": "Running"
+        }
+    }
+}

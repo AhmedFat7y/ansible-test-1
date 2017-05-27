@@ -1,18 +1,18 @@
 server {
-	listen 80;
-	listen [::]:80;
+	listen {{ site_port }};
+	listen [::]:{{ site_port }};
 	
-  root /home/deployer/web/public;
+  root {{ project_location }}/public;
 	index index.html index.htm index.php;
 	
-  server_name test.kanshoubakuya.com;
+  server_name {{ domain_name }};
 
 	location / {
 		try_files $uri $uri/ /index.php$is_args$args;
 	}
 	
 	location ~ \.php$ {
-		fastcgi_pass unix:/var/run/php7.1/deployer.sock;
+		fastcgi_pass unix:/var/run/php7.1/{{ deployer_user }}.sock;
 		fastcgi_index index.php;
 		include fastcgi_params;
 	}

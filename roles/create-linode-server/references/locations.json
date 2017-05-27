@@ -1,0 +1,47 @@
+[
+  {
+    "DATACENTERID": 2, 
+    "LOCATION": "Dallas, TX, USA", 
+    "ABBR": "dallas"
+  }, 
+  {
+    "DATACENTERID": 3, 
+    "LOCATION": "Fremont, CA, USA", 
+    "ABBR": "fremont"
+  }, 
+  {
+    "DATACENTERID": 4, 
+    "LOCATION": "Atlanta, GA, USA", 
+    "ABBR": "atlanta"
+  }, 
+  {
+    "DATACENTERID": 6, 
+    "LOCATION": "Newark, NJ, USA", 
+    "ABBR": "newark"
+  }, 
+  {
+    "DATACENTERID": 7, 
+    "LOCATION": "London, England, UK", 
+    "ABBR": "london"
+  }, 
+  {
+    "DATACENTERID": 8, 
+    "LOCATION": "Tokyo, JP", 
+    "ABBR": "tokyo"
+  }, 
+  {
+    "DATACENTERID": 9, 
+    "LOCATION": "Singapore, SG", 
+    "ABBR": "singapore"
+  }, 
+  {
+    "DATACENTERID": 10, 
+    "LOCATION": "Frankfurt, DE", 
+    "ABBR": "frankfurt"
+  }, 
+  {
+    "DATACENTERID": 11, 
+    "LOCATION": "Tokyo 2, JP", 
+    "ABBR": "shinagawa1"
+  }
+]
