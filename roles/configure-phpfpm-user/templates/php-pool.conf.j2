@@ -1,13 +1,13 @@
-[deployer]
-user = deployer
-group = deployer
-listen = /var/run/php7.1/deployer.sock
+[{{ deployer_user }}]
+user = {{ deployer_user }}
+group = {{ deployer_user }}
+listen = /var/run/php7.1/{{ deployer_user }}.sock
 listen.owner = www-data
 listen.group = www-data
 php_admin_value[disable_functions] = exec,passthru,shell_exec,system
 php_admin_flag[allow_url_fopen] = off
 pm = static
-pm.max_children = 35
+pm.max_children = {{ site_php_workers }}
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3

@@ -1,29 +1,55 @@
-- hosts: host0
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - "required-vars.yml"
+  tasks:
+    - name: Create Linode Server
+      include_role:
+        name: create-linode-server
+  
+    - name: Add the IP of newely created server
+      add_host:
+        name: "{{ created_linode['instance']['ipv4'] }}"
+        groups: "{{ hosts_group }}"
+   
+- hosts: "{{ hostvars['127.0.0.1']['groups'][hosts_group] | join(':') }}"
+  vars_files:
+    - "required-vars.yml"
   remote_user: "{{ sudo_user }}"
+  become: True
   tasks:
     - name: Install basic packages and so on
       include_role:
         name: basics
+    
     - name: Create User that will handle running the app and deploy updates
       include_role:
         name: create-deployer-user
+    
     - name: Install PHP 7.1, required php packages for lumen
       include_role:
         name: php
+    
     - name: Configure SSH service to disable password login
       include_role:
         name: configure-sshd-service
+    
     - name: Configure PHP FPM Pool with the deployer's user name
       include_role:
         name: configure-phpfpm-user
+    
     - name: Configure NGINX to listen to the PHP FPM Pool of the deployer
       include_role:
         name: configure-nginx-sites
+    
     - name: Install PHP Composer
       include_role:
         name: install-php-composer
 
-- hosts: host0
+
+- hosts: "{{ hostvars['127.0.0.1']['groups'][hosts_group] | join(':') }}"
+  vars_files:
+    - "required-vars.yml"
   remote_user: "{{ deployer_user }}"
   tasks:
     - name: Deploy The lumen app

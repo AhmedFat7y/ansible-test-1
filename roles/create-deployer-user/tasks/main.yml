@@ -1,7 +1,7 @@
 - name: Create deployment user
   user:
     name: "{{ deployer_user }}"
-    password: "{{ 'deployer' | password_hash('sha512') }}"
+    password: "{{ deployer_pass }}"
     shell: /bin/bash
     update_password: on_create
   register: deployer_created

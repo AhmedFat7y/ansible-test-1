@@ -1,10 +1,11 @@
-- local_action:
-    module: linode
+- name: Create linode server 
+  linode:
+    linode_id: "{{ linode_id|default(None) }}"
     name: "{{linode_name}}"
     plan: "{{linode_plan}}"
     datacenter: "{{linode_datacenter}}"
     distribution: "{{linode_distro}}"
-    private_ip: yes
+    # private_ip: yes
     ssh_pub_key: "{{ linode_ssh_key }}"
     swap: 768
     wait: yes
@@ -21,9 +22,6 @@
     state: present
   register: created_linode
 
-- debug:
+- name: Debug
+  debug:
     var: created_linode
-
-# - add_host:
-#   name: "{{ ip_from_ec2 }}"
-#   groups: "{{ hosts_group }}"

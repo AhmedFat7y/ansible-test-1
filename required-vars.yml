@@ -1,0 +1,22 @@
+hosts_group: linode
+domain_name: test.kanshoubakuya.com
+sudo_user: enuma
+ansible_become_pass: LOL@lol1
+deployer_user: deployer
+deployer_pass: "{{ 'deployer' | password_hash('sha512') }}"
+project_location: /home/deployer/web
+project_repo: gitlab@gitlab.robustastudio.com:AyaAhmed/testlumenmama.git
+site_port: 80
+site_php_workers: 5
+DB_HOST: 192.168.156.157
+DB_PORT: 3306
+DB_DATABASE: testsupermam
+DB_USERNAME: supermum
+DB_PASSWORD: hello@mum
+LINODE_API_KEY: HScK0PXPK2KNJ3xjbldMqs0EjwGvNB7nYvJ2g33dWlkTnxcQ0qc7oOIaeeRDzCvx
+linode_id: 2859942
+linode_name: test1
+linode_plan: 1
+linode_datacenter: 10
+linode_distro: 146
+linode_ssh_key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
