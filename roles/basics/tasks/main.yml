@@ -10,6 +10,7 @@
     - wget
     - curl
     - git
+    - unzip
     - mercurial
     - make
     - binutils

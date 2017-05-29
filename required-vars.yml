@@ -3,9 +3,10 @@ domain_name: test.kanshoubakuya.com
 sudo_user: enuma
 ansible_become_pass: LOL@lol1
 deployer_user: deployer
+deployer_group: www-data
 deployer_pass: "{{ 'deployer' | password_hash('sha512') }}"
 project_location: /home/deployer/web
-project_repo: gitlab@gitlab.robustastudio.com:AyaAhmed/testlumenmama.git
+project_repo: "gitlab@gitlab.robustastudio.com:AyaAhmed/testlumenmama.git"
 site_port: 80
 site_php_workers: 5
 DB_HOST: 192.168.156.157
@@ -20,3 +21,4 @@ linode_plan: 1
 linode_datacenter: 10
 linode_distro: 146
 linode_ssh_key: "{{ lookup('file', 'ssh-keys/macair-fat7y.pub') }}"
+server_state: 'DEPLOY' # 'UPDATE', 'SETUP' 'DEPLOY'

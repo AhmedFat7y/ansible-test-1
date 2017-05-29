@@ -21,37 +21,38 @@
     - name: Install basic packages and so on
       include_role:
         name: basics
-    
+      when: server_state ==  'SETUP'
+
     - name: Create User that will handle running the app and deploy updates
       include_role:
         name: create-deployer-user
-    
+      when: server_state ==  'SETUP'
+
     - name: Install PHP 7.1, required php packages for lumen
       include_role:
         name: php
-    
+      when: server_state ==  'SETUP'
+
     - name: Configure SSH service to disable password login
       include_role:
         name: configure-sshd-service
-    
+      when: server_state ==  'SETUP'
+
     - name: Configure PHP FPM Pool with the deployer's user name
       include_role:
         name: configure-phpfpm-user
+      when: server_state ==  'SETUP'
     
     - name: Configure NGINX to listen to the PHP FPM Pool of the deployer
       include_role:
         name: configure-nginx-sites
-    
+      when: server_state ==  'SETUP'
+
     - name: Install PHP Composer
       include_role:
         name: install-php-composer
+      when: server_state ==  'SETUP'
 
-
-- hosts: "{{ hostvars['127.0.0.1']['groups'][hosts_group] | join(':') }}"
-  vars_files:
-    - "required-vars.yml"
-  remote_user: "{{ deployer_user }}"
-  tasks:
     - name: Deploy The lumen app
       include_role:
         name: deploy-lumen-app

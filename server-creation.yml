@@ -1,17 +1,11 @@
 - hosts: 127.0.0.1
   connection: local
   tasks:
-    - name: Create a Linode Server
+   - name: Create Linode Server
       include_role:
         name: create-linode-server
-      register: created_server
-      ignore_errors: True
-
-    - name: Debug the creation output
-      debug:
-        var: created_linode
   
     - name: Add the IP of newely created server
       add_host:
-        name: "{{ created_server['created_linode']['instance']['ipv4'] }}"
+        name: "{{ created_linode['instance']['ipv4'] }}"
         groups: "{{ hosts_group }}"

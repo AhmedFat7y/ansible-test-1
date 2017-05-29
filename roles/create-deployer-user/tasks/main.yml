@@ -1,9 +1,7 @@
 - name: Create deployment user
   user:
     name: "{{ deployer_user }}"
-    password: "{{ deployer_pass }}"
-    shell: /bin/bash
-    update_password: on_create
+    shell: /sbin/nologin
   register: deployer_created
 
 - name: Add ssh key
@@ -16,7 +14,8 @@
   file:
     path: "/home/{{ deployer_user }}"
     state: directory
-    mode: 0740
+    owner: "{{ deployer_user }}"
+    group: "{{ deployer_group }}"
 
 - name: "Set proper acl flags for {{ deployer_user }}"
   acl:
@@ -29,7 +28,7 @@
 - name: set proper acl flags for www-data group
   acl:
     path: "/home/{{ deployer_user }}"
-    entry: "g:www-data:r"
+    entry: "g:{{ deployer_group }}:rx"
     state: present
     recursive: yes
     default: yes
@@ -38,9 +37,18 @@
   file:
     path: "{{ project_location }}"
     state: directory
-    group: "{{ deployer_user }}"
+    group: "{{ deployer_group }}"
     owner: "{{ deployer_user }}"
 
+- name: "Ensure permissions on /home/{{ deployer_user }}"
+  shell: chmod 2750 -R /home/{{ deployer_user }}
+
+- name: "Ensure /home/{{ deployer_user }}/.ssh exists"
+  file:
+    path: "/home/{{ deployer_user }}/.ssh"
+    state: directory
+    owner: "{{ deployer_user }}"
+  
 - name: Copy deployer private key to remote machine
   copy:
     src: deployer_user

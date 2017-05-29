@@ -1,14 +1,25 @@
+- name: Debug project_repo
+  debug:
+    var: project_repo
+
 - name: Clone/Update aya's lumen app
   git: 
     repo: "{{ project_repo }}"
     dest: "{{ project_location }}"
     accept_hostkey: True
     force: True
+  become: true
+  become_user: "{{ deployer_user }}"
 
-- name: Run composer update
+- name: Run composer Install & Update 
   shell: composer update  
   args:
     chdir: "{{ project_location }}"
+  become: true
+  become_user: "{{ deployer_user }}"
+  with_items:
+    - composer install
+    - composer update
 
 # need to copy .env file and make sure it points to correct database
 - name: Copy .env file to lumen app directory
@@ -18,9 +29,11 @@
     owner: "{{ deployer_user }}"
     group: "{{ deployer_user }}"
     mode: 0400
-
+  when: server_state == 'SETUP'
 
 - name: Run Artisan migrate
   shell: php artisan migrate
   args:
     chdir: "{{ project_location }}"
+  become: true
+  become_user: "{{ deployer_user }}"
